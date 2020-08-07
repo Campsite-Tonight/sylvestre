@@ -1,22 +1,21 @@
 const {
   queue,
-  queue2
+  campsiteQueue
 } = require('./lib/jobs/queue.js');
+const { findCampgroundIds } = require('./lib/utils/campsiteUtils.js');
   
 
   
 Promise.all([
   queue.empty(),
-  queue2.empty()
+  campsiteQueue.empty()
 ])
-  .then(() => queue.add({}))
-  .then(() => console.log('Clackamas County jobs added'))
-  .then(() => Promise.all(queue2.map(id => queue2.add({ id }))))
-  .then(() => console.log('Washington County jobs added'))
+  .then(() => findCampgroundIds())
+  .then(() => console.log('Campground jobs added'))
   .catch(error => console.log('Error adding jobs', error))
   .finally(() => Promise.all(([
     queue.close(),
-    queue2.close()
+    campsiteQueue.close()
   ])));
   
   
